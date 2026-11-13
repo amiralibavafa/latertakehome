@@ -1,0 +1,14 @@
+{
+  "name": "later-project-workspace",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A local project dashboard for the Later take-home exercise.",
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "inspect:api": "node scripts/inspect-api.js",
+    "test": "node --test"
+  }
+}

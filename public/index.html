@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#6358e8" />
+    <meta name="description" content="One simple workspace for your team's projects and deadlines." />
+    <title>Projects · Later workspace</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/styles.css" />
+    <script type="module" src="/app.js"></script>
+    <script type="module" src="/chat.js"></script>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <a class="brand" href="/" aria-label="Later workspace home"><img src="/favicon.svg" alt="" />later<span class="brand-dot">.</span></a>
+      <div class="workspace-label"><span class="workspace-icon">L</span><div>Team workspace<span>Projects, made simple</span></div></div>
+      <p class="nav-label">WORKSPACE</p>
+      <nav aria-label="Workspace views">
+        <button class="nav-item active" data-view="all" aria-current="page"><span data-icon="grid"></span>All projects<span class="nav-count" id="nav-all">—</span></button>
+        <button class="nav-item" data-view="attention"><span data-icon="flag"></span>Needs attention<span class="nav-count" id="nav-attention">—</span></button>
+        <button class="nav-item" data-view="completed"><span data-icon="checkCircle"></span>Completed<span class="nav-count" id="nav-completed">—</span></button>
+        <button class="nav-item" data-view="submissions"><span data-icon="inbox"></span>Submissions<span class="nav-count" id="nav-submissions">0</span></button>
+        <button class="nav-item" data-view="manager"><span data-icon="report"></span>Manager overview<span class="nav-count" id="nav-manager">—</span></button>
+      </nav>
+      <div class="sidebar-note"><span class="connection-dot"></span><strong id="connection-label">Connecting to API</strong><p>Your team's projects, straight from the source.</p></div>
+      <div class="profile"><span class="avatar avatar-self">A</span><div>Amirali<span>Local workspace</span></div><span class="local-pill">LOCAL</span></div>
+    </aside>
+
+    <div class="main-shell">
+      <header class="topbar"><div><span class="breadcrumb">Workspace</span><span class="slash">/</span><span>Projects</span></div><div class="topbar-right"><span class="local-indicator"></span>Local workspace<span class="avatar avatar-small">A</span></div></header>
+      <main>
+        <div class="page-heading"><div><div class="eyebrow">A CLEARER VIEW OF YOUR WORK</div><h1 id="page-title">All projects<span class="title-dot">.</span></h1><p id="page-description">Keep the big picture. Stay on top of the little things.</p></div><div class="heading-actions"><button class="button button-outline" id="refresh" aria-label="Refresh projects"><span data-icon="refresh"></span><span>Refresh projects</span></button><button class="button button-outline" id="new-project" aria-label="New project"><span data-icon="plus"></span><span>New project</span></button><button class="button button-primary" id="submit-work"><span data-icon="send"></span>Submit work</button></div></div>
+
+        <section class="stats" aria-label="Workspace overview">
+          <article class="stat-card"><div class="stat-top"><span>Total projects</span><span class="stat-icon lavender" data-icon="grid"></span></div><div class="stat-value" id="stat-total">—</div><div class="stat-caption">Across your workspace</div></article>
+          <article class="stat-card"><div class="stat-top"><span>In progress</span><span class="stat-icon blue" data-icon="activity"></span></div><div class="stat-value" id="stat-active">—</div><div class="stat-caption">Moving things forward</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Overdue tasks</span><span class="stat-icon rose" data-icon="clock"></span></div><div class="stat-value" id="stat-overdue">—</div><div class="stat-caption">A little attention needed</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Completed tasks</span><span class="stat-icon mint" data-icon="checkCircle"></span></div><div class="stat-value" id="stat-done">—</div><div class="stat-caption" id="done-caption">Good work adds up</div></article>
+        </section>
+        <div id="error-banner" class="error-banner" role="alert" hidden></div>
+
+        <section id="submission-section" class="submission-section" aria-label="Work submissions" hidden><div class="submission-heading"><div><h2>Work, handed over.</h2><p id="submission-count" role="status">No submissions yet.</p></div><span class="small-label">Updates every 15 seconds</span></div><div id="submission-list"></div></section>
+
+        <section id="manager-section" aria-label="Manager overview" hidden><div class="manager-heading"><div><h2>The state of play.</h2><p id="manager-overview-count" role="status">Loading project summaries…</p></div><a class="button button-outline" id="download-report" href="/api/report"><span data-icon="download"></span>Download 7-day summary</a></div><label class="search manager-search"><span data-icon="search"></span><input type="search" id="manager-search" aria-label="Search project summaries" placeholder="Find a project in the overview…" /></label><div id="manager-projects" class="manager-projects"></div><div class="activity-heading"><div><h2>What changed</h2><p id="activity-coverage">Activity tracking begins with edits through this app.</p></div><div class="activity-filters"><label><span class="visually-hidden">Filter activity by project</span><select id="activity-project" aria-label="Filter activity by project"><option value="">All projects</option></select></label><label><span class="visually-hidden">Activity period</span><select id="activity-period" aria-label="Activity period"><option value="week">Last 7 days</option><option value="all">All tracked history</option></select></label></div></div><p id="activity-warning" class="error-banner" hidden></p><div id="activity-list" class="activity-list"></div><button type="button" id="more-activity" class="button button-outline" hidden>Show more activity</button><p class="manager-footnote">Summaries use current project data. History covers confirmed edits through this app and recorded submissions. A stale timestamp is a reason to check in, not proof that work stopped.</p></section>
+
+        <section class="projects-section" aria-label="Projects">
+          <div class="project-toolbar"><div class="tabs" role="group" aria-label="Filter projects"><button class="tab active" data-filter="all" aria-pressed="true">All projects <span id="tab-total">—</span></button><button class="tab" data-filter="active" aria-pressed="false">In progress</button><button class="tab" data-filter="blocked" aria-pressed="false">Blocked</button></div><label class="search"><span data-icon="search"></span><input type="search" id="search" aria-label="Search projects by title or description" placeholder="Search projects…" autocomplete="off" /><kbd>/</kbd></label></div>
+          <div class="list-meta"><span id="results-count" role="status" aria-live="polite">Loading your projects…</span><div class="legend"><span><i class="dot safe"></i>5+ days</span><span><i class="dot soon"></i>0–4 days</span><span><i class="dot overdue"></i>Overdue</span></div></div>
+          <div id="project-list" aria-busy="true"><div class="loading-state"><span class="spinner"></span>Getting the latest from your workspace…</div></div>
+        </section>
+
+        <footer class="page-footer"><span><span data-icon="cloud"></span><span id="sync-status">Connecting to Later Projects API</span></span><a href="/api/snapshot" id="export-link"><span data-icon="download"></span>Export project data</a></footer>
+      </main>
+    </div>
+    <dialog id="task-dialog" aria-labelledby="task-dialog-title"><form method="dialog"><button class="close-dialog" aria-label="Close task details">×</button></form><div class="eyebrow">TASK DETAILS</div><h2 id="task-dialog-title"></h2><dl id="task-details"></dl><p class="dialog-note">Deadlines use your local calendar date. Completed tasks are excluded from overdue counts.</p></dialog>
+    <dialog id="edit-dialog" aria-labelledby="edit-dialog-title"><button type="button" class="close-dialog" id="close-editor" aria-label="Close editor">×</button><div class="eyebrow" id="editor-eyebrow">MAKE IT YOURS</div><h2 id="edit-dialog-title"></h2><form id="editor-form"><div id="editor-fields"></div><p id="editor-error" class="form-error" role="alert" hidden></p><div class="form-actions"><button type="button" class="button button-outline" id="cancel-editor">Cancel</button><button type="submit" class="button button-primary" id="save-editor">Save changes</button></div></form></dialog>
+    <dialog id="submission-dialog" aria-labelledby="submission-dialog-title"><button type="button" class="close-dialog" id="close-submission" aria-label="Close submission form">×</button><div class="eyebrow">READY FOR THE NEXT STEP</div><h2 id="submission-dialog-title">Submit your work</h2><form id="submission-form"><label class="form-field">Project<select name="projectId" id="submission-project" aria-label="Submission project" required></select></label><label class="form-field">Task<select name="taskId" id="submission-task" aria-label="Submission task" required></select></label><label class="form-field">Your name<input name="submitter" aria-label="Your name" required maxlength="100" placeholder="Who’s submitting?" /></label><label class="form-field">What happens next?<select name="mode" id="submission-mode" aria-label="Submission workflow"><option value="review">Send for manager review</option><option value="complete">Complete automatically</option></select></label><p class="workflow-note" id="workflow-note">Your task stays open until a manager approves it.</p><label class="form-field">Notes or a link to your work <span class="optional-label">Optional</span><textarea name="notes" aria-label="Submission notes" rows="2" maxlength="2000" placeholder="Anything your reviewer should know…"></textarea></label><p id="submission-error" class="form-error" role="alert" hidden></p><div class="form-actions"><button type="button" class="button button-outline" id="cancel-submission">Cancel</button><button type="submit" class="button button-primary" id="save-submission">Submit for review</button></div></form></dialog>
+    <dialog id="review-dialog" aria-labelledby="review-dialog-title"><button type="button" class="close-dialog" id="close-review" aria-label="Close submission review">×</button><div class="eyebrow" id="review-project"></div><h2 id="review-dialog-title">Review submission</h2><div id="review-details"></div><form id="review-form"><label class="form-field" id="reviewer-field">Reviewer name<input name="reviewer" aria-label="Reviewer name" required maxlength="100" placeholder="Your name" /></label><p id="review-error" class="form-error" role="alert" hidden></p><div class="form-actions"><button type="button" class="button button-outline" id="cancel-review">Cancel</button><button type="submit" class="button button-primary" id="approve-submission">Approve & complete</button></div></form></dialog>
+    <div id="toast" class="toast" role="status" hidden><span id="toast-message"></span><button aria-label="Dismiss notification" id="dismiss-toast">×</button></div>
+    <button class="chat-toggle" id="chat-toggle" aria-controls="chat-panel" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M20 11.5a8 8 0 0 1-8 8H5l-3 3v-11a9 9 0 1 1 18 0Z"/><path d="M7 11h10m-10 4h6"/></svg><span>Ask LLM</span></button>
+    <section id="chat-panel" class="chat-panel" aria-label="LLM workspace assistant" hidden><header class="chat-header"><div class="chat-avatar">AI</div><div class="chat-heading"><strong>Workspace LLM</strong><span id="chat-connection">Your workspace assistant</span></div><button id="chat-clear" class="chat-header-button" aria-label="Start a new chat" title="Start a new chat">↺</button><button id="chat-close" class="chat-header-button" aria-label="Close chat">×</button></header><div id="chat-messages" class="chat-messages" role="log" aria-live="polite" aria-relevant="additions"></div><p id="chat-error" class="chat-error" role="alert" hidden></p><form id="chat-form" class="chat-form"><label for="chat-input" class="visually-hidden">Ask LLM about your workspace</label><textarea id="chat-input" rows="2" maxlength="2000" placeholder="Ask about your projects…" required></textarea><div class="chat-input-bottom"><span>Fresh workspace data for every question</span><button type="submit" id="chat-send" aria-label="Send question">↑</button></div></form></section>
+  </body>
+</html>
